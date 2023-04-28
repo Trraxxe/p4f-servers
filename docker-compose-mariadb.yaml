@@ -1,0 +1,16 @@
+version: '2.1'
+
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:10.11
+    ports:
+      - '3306:3306'
+    environment:
+      - MARIADB_ROOT_USER=p4f
+      - MARIADB_ROOT_PASSWORD=qwerty123
+      - MARIADB_DATABASE=p4f
+    healthcheck:
+      test: ['CMD', '/opt/bitnami/scripts/mariadb/healthcheck.sh']
+      interval: 15s
+      timeout: 5s
+      retries: 6
