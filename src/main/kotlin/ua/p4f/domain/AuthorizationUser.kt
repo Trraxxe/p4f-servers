@@ -9,6 +9,9 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
 @Table(name = "users")
@@ -22,7 +25,8 @@ data class AuthorizationUser(
         allocationSize = 1
     )
     val id: Long,
-    val username: String,
+    private val username: String,
+    private val password: String,
     @JoinTable(
         name = "users_roles",
         joinColumns = [JoinColumn(name = "user_id")],
@@ -30,4 +34,18 @@ data class AuthorizationUser(
     )
     @ManyToOne
     val role: Role,
-)
+) : UserDetails {
+    override fun getAuthorities() = listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
+
+    override fun getPassword() = password
+
+    override fun getUsername() = username
+
+    override fun isAccountNonExpired() = true
+
+    override fun isAccountNonLocked() = true
+
+    override fun isCredentialsNonExpired() = true
+
+    override fun isEnabled() = true
+}

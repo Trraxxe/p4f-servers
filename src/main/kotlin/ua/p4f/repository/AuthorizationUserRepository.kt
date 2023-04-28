@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository
 import ua.p4f.domain.AuthorizationUser
 
 @Repository
-interface AuthorizationUserRepository : JpaRepository<AuthorizationUser, Long>
+interface AuthorizationUserRepository : JpaRepository<AuthorizationUser, Long> {
+
+    fun findByUsername(username: String): AuthorizationUser?
+}
